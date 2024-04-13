@@ -2,12 +2,16 @@ import { BadRequestException, Injectable, NotFoundException } from "@nestjs/comm
 import { PrismaService } from "../prisma/prisma.service";
 import { CreateCategoryDTO } from "./dtos/createCategory.dto";
 import { UpdateCategoryDTO } from "./dtos/updateCategory.dto";
+import { NewsService } from "../news/news.service";
 
 
 
 @Injectable()
 export class CategoryService{
-    constructor(private readonly prisma: PrismaService){}
+    constructor(
+        private readonly prisma: PrismaService,
+        
+    ){}
 
         public async create({name}: CreateCategoryDTO){
 
@@ -73,6 +77,10 @@ export class CategoryService{
             if(!existCategory){
                 throw new NotFoundException("Category id not found")
             }
+
+            /* const findCategoryInNews = await this.newsService.findByCategoryId(id)
+
+            if(findCategoryInNews)throw new BadRequestException("Cannot remove a category in use") */
 
             return this.prisma.categories.delete({
                 where: {id}

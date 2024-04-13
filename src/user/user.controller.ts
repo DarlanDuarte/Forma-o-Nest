@@ -40,6 +40,11 @@ export class UserController {
 
     }
 
+    @Get()
+    public async list(){
+        return await this.userService.list()
+    }
+
     
 
     

@@ -63,6 +63,10 @@ export class UserService {
 
     }
 
+    public async list(){
+        return await this.prismaService.user.findMany()
+    }
+
 
 
     public async ExistEmail(email: string){
