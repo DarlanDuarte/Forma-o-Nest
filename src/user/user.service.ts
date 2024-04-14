@@ -16,12 +16,6 @@ export class UserService {
             throw new BadRequestException("Name, Email and Password Required!")
         }
 
-        const findEmail = await this.ExistEmail(data.email)
-
-        if(findEmail){
-            throw new BadRequestException(`Email already exist!`)
-        }
-
 
         const passwordHash = await hash(data.password, 10)
         const userData: Prisma.UserCreateInput = {...data, password: passwordHash}

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotFoundException, Param, Post, Put, UsePipes, ValidationPipe } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Get, NotFoundException, Param, Post, Put, UsePipes, ValidationPipe } from "@nestjs/common";
 import { CreateUserDTO } from "./dtos/create-user.dto";
 import { UserService } from "./user.service";
 import { User } from "@prisma/client";
@@ -12,6 +12,12 @@ export class UserController {
     @UsePipes(ValidationPipe)
     @Post()
     public async create(@Body() data: CreateUserDTO){
+
+        const findEmail = await this.userService.ExistEmail(data?.email)
+
+        if(findEmail){
+            throw new BadRequestException(`Email already exist!`)
+        }
         
         const user = await this.userService.create(data)
 
