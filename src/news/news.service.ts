@@ -22,14 +22,6 @@ export class NewsService {
 
         if(!title || !content || !author_id || !category_id)throw new BadRequestException("Required data was not provided")
 
-        const findUser = await this.userService.findById(author_id)
-
-        if(!findUser)throw new NotFoundException("User not found")
-        
-        const findCategory = await this.categoryService.findById(category_id)
-
-        if(!findCategory)throw new NotFoundException("Category not found")
-
         return await this.prisma.news.create({
             data:{
                 title,
@@ -51,18 +43,7 @@ export class NewsService {
     public async update({id, data}: {id: string, data: UpdateNewsDTO}){
         
         const {title, content, category_id} = data
-
-        if(!title || !content || !category_id){
-            throw new BadRequestException("Data was not passed")
-        }
-
-        const findId = await this.findById(id)
-
-        if(!findId) throw new NotFoundException('News not found')
-
-        const findCategoryId = await this.categoryService.findById(category_id)
-
-        if(!findCategoryId) throw new NotFoundException("Category id not found")
+        
 
         return await this.prisma.news.update({
             where: {id},
