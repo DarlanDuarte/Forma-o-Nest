@@ -15,9 +15,7 @@ export class CategoryService{
 
         public async create({name}: CreateCategoryDTO){
 
-            const nameCategory = await this.findByName(name)
-
-            if(nameCategory) throw new BadRequestException("Category name already exists")
+            
 
             return await this.prisma.categories.create({
                 data:{

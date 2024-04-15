@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes, ValidationPipe } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put, UsePipes, ValidationPipe } from "@nestjs/common";
 import { CreateCategoryDTO } from "./dtos/createCategory.dto";
 import { CategoryService } from "./cateogory.service";
 
@@ -13,9 +13,13 @@ export class CategoryController{
 
     @UsePipes(ValidationPipe)
     @Post()
-    public async create(@Body() name: CreateCategoryDTO){
+    public async create(@Body() {name}: CreateCategoryDTO){
 
-        return await this.categoryService.create(name)
+        const nameCategory = await this.categoryService.findByName(name)
+
+        if(nameCategory) throw new BadRequestException("Category name already exists")
+
+        return await this.categoryService.create({name})
 
     }
 
